@@ -1,4 +1,4 @@
-# chatgptWxBot
+# ChatGptWeChatBot
 
 #### 介绍
 基于openai chatgpt的微信机器人，支持key轮询，openai绘图，sd绘图，私聊群聊，自定义角色
@@ -18,6 +18,10 @@
 - utils 常用功能
 - wxbot.py 微信机器人主要实现
 
+#### 使用截图
+![使用](img/%E4%BD%BF%E7%94%A8.jpg)
+![功能](img/%E5%8A%9F%E8%83%BD.jpg)
+![管理](img/%E7%AE%A1%E7%90%86.jpg)
 
 #### 安装教程
 
