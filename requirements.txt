@@ -1,0 +1,4 @@
+itchat==1.2.32
+itchat_uos==1.5.0.dev0
+langchain==0.0.231
+Requests==2.31.0

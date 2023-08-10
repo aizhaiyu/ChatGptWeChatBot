@@ -1,0 +1,8 @@
+.vscode
+itchat.pkl
+config.yaml
+__pycache__
+
+#忽略目录下的所有文件
+#docs/*
+
