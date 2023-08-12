@@ -3,6 +3,7 @@ from utils.instruct import Instruct
 from datetime import datetime, timedelta
 from plugins.openai.role import ChatGpt, DrawingGenerator
 from utils.util import Common, Util
+from admin.admin import Admin
 import config.log
 import os
 
@@ -13,6 +14,8 @@ class WxBot:
     def __init__(self):
         self.instruct = Instruct()
         self.config = Util.get_config()
+        self.GroupGptList=Util.get_config().GroupChatList
+        self.FriendGptList=Util.get_config().FriendChatList
         # 初始化 ChatGpt 实例，用于群聊
         self.GroupGpt = ChatGpt(
             self.config.openai_api_key[0],
@@ -40,9 +43,12 @@ class WxBot:
         群聊
         '''
         if msg.isAt:
+            
+            # for chat in itchat.get_chatrooms(update=True):
+            #     pass
             result = Util.cleanAt(msg.text)
             fun_name, result = self.instruct.question(result)
-
+            
             logger.info(
                 f'\n发起人：{msg.actualNickName}\n内容：{msg.text}\n处理内容：{result}')
 
@@ -61,8 +67,9 @@ class WxBot:
         '''
         私聊
         '''
-        fromName = msg['User']['RemarkPYQuanPin']
-        friend = self.config.FriendChatList
+        fromName = msg['User']['RemarkName']
+        friend = self.FriendGptList
+        
         if (fromName in friend) or len(friend) == 0:
             fun_name, result = self.instruct.question(msg.text)
 
@@ -74,7 +81,7 @@ class WxBot:
             elif fun_name == self.instruct.isHelp.__name__:
                 self.send_message(msg.user, result)
             elif fun_name == self.instruct.admin.__name__:
-                self.process_admin_command(msg, result)
+                self.process_admin_command(msg, result, fromName)
             elif Util.check_char_in_list(result, self.config.draw):
                 self.openai_draw_image(msg, result)
             else:
@@ -89,7 +96,7 @@ class WxBot:
         txt = f'@{actualNickName}\u2005 绘图成功 \n耗时：{time_diff.total_seconds()}秒'
         logger.info(txt)
         msg.user.send(txt)
-        msg.user.send(f'@img@./img/sd.png')
+        msg.user.send('@img@./img/sd.png')
 
     def openai_draw_image(self, msg, result, actualNickName=None):
         # 生成绘图
@@ -104,7 +111,7 @@ class WxBot:
         txt = f'@{actualNickName}\u2005 绘图成功 \n耗时：{time_diff.total_seconds()}秒'
         logger.info(txt)
         msg.user.send(txt)
-        msg.user.send(f'@img@./img/sd.png')
+        msg.user.send('@img@./img/sd.png')
 
     def send_message(self, user, message):
         # 发送帮助信息
@@ -113,16 +120,41 @@ class WxBot:
     def process_admin_command(self, msg, result, actualNickName=None):
         fun_admin, text = result
         if actualNickName == self.config.admin:
-            if fun_admin == 'admin':
+            if fun_admin == Admin.admin.__name__:
                 msg.user.send(text)
-            elif fun_admin == 'admin_role' and text is not None:
+            elif fun_admin == Admin.admin_role.__name__ and text is not None:
                 # 设置角色
                 self.GroupGpt.role = text
                 msg.user.send("角色设置成功")
+            elif fun_admin in [
+                Admin.del_GroupChat.__name__,
+                Admin.del_FriendChat.__name__,
+            ]:
+                self.del_list(fun_admin, text)
+            elif fun_admin in [
+                Admin.add_FriendChat.__name__,
+                Admin.add_GroupChat.__name__,
+            ]:
+                self.add_list(fun_admin, text)
             else:
                 msg.user.send("设置失败或指令错误")
         else:
             msg.user.send("权限不足")
+            
+            
+    def del_list(self,type,item):
+        if type == Admin.del_FriendChat.__name__:
+            self.FriendGptList = [x for x in self.FriendGptList if x != item]
+            return self.FriendGptList
+        else:
+            self.GroupGptList = [x for x in self.GroupGptList if x != item]
+            return self.GroupGptList
+        
+    def add_list(self,type,item):
+        if type == Admin.add_FriendChat.__name__:
+            self.FriendGptList.append(item)
+        else:
+            self.GroupGptList.append(item)
 
     
 

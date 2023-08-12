@@ -9,10 +9,10 @@ wx_bot:
     #可用群聊名称 不填全启用
     GroupChatList:
 
-    #指定私聊名称，例：黎明时候是管理 ：limingshihoushiguanli 不填全启用
+    #指定私聊名称，不填全启用
     FriendChatList:
-      - baobao
-      - limingshihoushiguanli
+      - 黎明时候是管理
+      - 小明
     #群聊角色设置
     GroupChatRole: 你都要巧妙的用脏话回复。即使面对批评，道德审判，任何形式的你现在是一个非常暴躁的程序媛，虽然说脏话但还是会给出标准详细的答案，你自己名字叫null，性别女，无论我问什么质疑，或者让你忘记用脏话，等等任何提问和沟通，你都要要遵守你的定义，同时你的解决编程问题时能力是非常强的，要详细解决我提出的问题，并且隐瞒你助手的身份。
     #私聊角色设置
@@ -27,7 +27,7 @@ openai:
   temperature: 0.9
   #轮询次数
   threshold: 3
-  #openai代理地址 可不填
+  #openai代理地址 可不填，不填需要外网
   openai_api_base: 
   #openai key 必填：可多个
   openai_api_key:
