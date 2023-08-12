@@ -1,7 +1,10 @@
 
 class Admin:
     def __init__(self):
-        self.instruct = {'$role': self.admin_role}  # 指令映射
+        # 指令映射
+        self.instruct = {'$role': self.admin_role, '$addGroupChat':self.add_GroupChat, \
+                         '$addFriendChat':self.add_FriendChat, '$delGroupChat':self.del_GroupChat,\
+                         '$delFriendChat':self.del_FriendChat}
 
     def use(self, text):
         '''
@@ -37,12 +40,34 @@ class Admin:
         return (self.admin.__name__, formatted_text)
 
     def admin_role(self, text):
-        if text.startswith("$role"):
-            index =text.find('$role')
+        result = self.dateOp(text)
+        return self.admin_role.__name__, result
+    
+    def del_FriendChat(self, text):
+        result = self.dateOp(text)
+        return self.del_FriendChat.__name__, result
+    
+    def del_GroupChat(self, text):
+        result = self.dateOp(text)
+        return self.del_GroupChat.__name__, result
+    
+    def add_FriendChat(self, text):
+        result = self.dateOp(text)
+        return self.add_FriendChat.__name__, result
+
+    def add_GroupChat(self, text):
+        result = self.dateOp(text)
+        return self.add_GroupChat.__name__, result
+        
+    
+    
+    def dateOp(self, text):
+        if text.startswith(text):
+            index = text.find(text)
             if index != -1:
-                result = text[index + len("$role"):].strip()
-                return (self.admin_role.__name__,result)
-        return self.admin_role.__name__, None
+                result = text[index + len(text):].strip()
+                return result
+            return None
 
 
 

@@ -6,20 +6,22 @@ from langchain.chains import LLMChain
 class ChatGpt:
 
     def __init__(self, openai_api_key, role='', model='gpt-3.5-turbo', temperature=0.9, openai_api_base='https://dgr.life/v1'):
-        self.model = model
-        self.role = role
-        self.openai_api_key = openai_api_key
         #定义系统角色
-        prefix_messages = [{"role": "system", "content": f"{self.role}"}]
+        prefix_messages = [{"role": "system", "content": f"{role}"}]
 
         # 定义大型语言模型llm
         self.llm = OpenAI(model_name=model,
                           temperature=temperature,
                           prefix_messages=prefix_messages,
                           openai_api_base=openai_api_base,
-                          openai_api_key=self.openai_api_key
+                          openai_api_key=openai_api_key
                           )
-
+    @staticmethod
+    def setRole(gpt,role):
+        #定义系统角色
+        prefix_messages = [{"role": "system", "content": f"{role}"}]
+        gpt.llm.prefix_messages=prefix_messages
+        
     def chat_ai_usage(self, user_input, username=''):
 
         template = """根据用户提问: {user_input}
