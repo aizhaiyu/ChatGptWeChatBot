@@ -27,7 +27,7 @@
 
 1.  进入目录chatgptWxBot
 2.  安装需要的库
-    `pip freeze > requirements.txt`
+    `pip install -r requirements.txt`
 3.  运行wxbot.py文件
 
 #### 使用说明
