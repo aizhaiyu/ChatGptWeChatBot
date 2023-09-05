@@ -1,6 +1,8 @@
+#运行系统 windows:false / linux:true linux二维码显示不完整设置为2
+system: false
 #微信名
 wx_bot:
-  admin: 黎明时候是管理 #微信管理人备注
+  admin: 黎明时候是管理 #机器人微信号好友列表备注
   name: 'null' #机器人微信昵称
   chat:
     #是否开启群聊/私聊：True开启、False关闭
@@ -9,7 +11,7 @@ wx_bot:
     #可用群聊名称 不填全启用
     GroupChatList:
 
-    #指定私聊名称，不填全启用
+    #指定私聊备注昵称，不填全启用
     FriendChatList:
       - 黎明时候是管理
       - 小明
@@ -39,7 +41,9 @@ openai:
     - 画
     - 畫
     - draw
-  
+
 #超时 秒
 timeout: 30
+
+
 
