@@ -40,7 +40,7 @@ class Util:
         # @null  /img 你在干嘛 获取:/img 你在干嘛
         prefix = f'@{name}'
         message = message[message.index(prefix) + len(prefix):]#去掉艾特
-        return message.replace(f'\u2005', '')
+        return message.replace(f'\u2005', '') 
     
 
     @staticmethod
