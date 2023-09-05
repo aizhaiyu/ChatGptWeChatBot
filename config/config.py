@@ -69,3 +69,6 @@ class Config:
     @property
     def timeout(self):
         return self.config_data['timeout']
+    @property
+    def system(self):
+        return self.config_data['system']

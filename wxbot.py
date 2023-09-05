@@ -184,7 +184,7 @@ class WxBot:
         except Exception as e:
             logger.exception(f'An error occurred:{e}')
 
-        itchat.auto_login(hotReload=True)
+        itchat.auto_login(hotReload=True,enableCmdQR=self.config.system)
         itchat.run()
 
 def main():
