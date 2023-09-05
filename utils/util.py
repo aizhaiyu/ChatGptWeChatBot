@@ -26,7 +26,7 @@ class Util:
         '''
         if Util._ai_key is None:
             con=Util.get_config()
-            Util._ai_key = GenerateList(con.openai_api_key,con.threshold).generate_list
+            Util._ai_key = GenerateList(con.openai_api_key,con.threshold).next_item
         return Util._ai_key
     
     # WeChatBot=WeChatBotWrapper()

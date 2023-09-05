@@ -102,9 +102,7 @@ class WxBot:
         # 生成绘图
         current_time = datetime.now()
         result = self.Draw.generate_drawing(result)
-        key = next(self.key, None)
-        if key is not None:
-            self.Draw.api_key = key
+        self.Draw.api_key = next(self.key)#轮询
         Common().dowImg(result)
         new_time = datetime.now()
         time_diff = new_time - current_time
@@ -159,13 +157,13 @@ class WxBot:
     
 
     def chat_with_gpt(self, user, message, actualNickName=None):
-        key = next(self.key, None)
-        if key is not None:
-            os.environ["OPENAI_API_KEY"] = key
+        key=next(self.key)
+        print(key)
+        os.environ["OPENAI_API_KEY"] = key#轮询
         # 使用 GPT 进行聊天
         if actualNickName is not None:
             res = self.GroupGpt.chat_ai_usage(message)
-            user.send(f'@{actualNickName}\u2005 \n{res}')
+            user.send(f'@{actualNickName}\u2005\n{res}')
         else:
             res = self.FriendGpt.chat_ai_usage(message)
             user.send(res)
