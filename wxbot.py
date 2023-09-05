@@ -17,26 +17,26 @@ class WxBot:
         self.GroupGptList=Util.get_config().GroupChatList
         self.FriendGptList=Util.get_config().FriendChatList
         # 初始化 ChatGpt 实例，用于群聊
-        self.GroupGpt = ChatGpt(
-            self.config.openai_api_key[0],
-            role=self.config.GroupChatRole,
-            openai_api_base=self.config.openai_api_base,
-            temperature=self.config.temperature,
-            model=self.config.model_name
-        )
+        self.GroupGpt = self.set_role_model(self.config.GroupChatRole,self.config.model_name)
         # 初始化 ChatGpt 实例，用于私聊
-        self.FriendGpt = ChatGpt(
-            self.config.openai_api_key[0],
-            role=self.config.FriendChatRole,
-            openai_api_base=self.config.openai_api_base,
-            temperature=self.config.temperature,
-            model=self.config.model_name
-        )
+        self.FriendGpt = self.set_role_model(self.config.FriendChatRole,self.config.model_name)
         # 初始化 DrawingGenerator 实例，用于生成绘图
         self.Draw = DrawingGenerator(
             self.config.openai_api_key[0], self.config.openai_api_base)
         
         self.key = iter(Util.get_ai_key())
+        
+    def set_role_model(self, role,model_name):
+        '''
+        设置角色or模型
+        '''
+        return ChatGpt(
+            self.config.openai_api_key[0],
+            role=role,
+            openai_api_base=self.config.openai_api_base,
+            temperature=self.config.temperature,
+            model=model_name
+        )
 
     def handle_group_chat(self, msg):
         '''
@@ -122,8 +122,9 @@ class WxBot:
                 msg.user.send(text)
             elif fun_admin == Admin.admin_role.__name__ and text is not None:
                 # 设置角色
-                self.GroupGpt.role = text
+                self.GroupGpt = self.set_role_model(text,self.config.model_name)
                 msg.user.send("角色设置成功")
+                
             elif fun_admin in [
                 Admin.del_GroupChat.__name__,
                 Admin.del_FriendChat.__name__,
