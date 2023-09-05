@@ -27,7 +27,7 @@
 
 1.  进入目录chatgptWxBot
 2.  安装需要的库
-    `pip freeze > requirements.txt`
+    `pip install -r requirements.txt`
 3.  运行wxbot.py文件
 
 #### 使用说明
@@ -35,6 +35,10 @@
 1.  先更改config/config copy.yaml文件名重命名为config.yaml
 2.  打开config.yaml配置文件，将自己机器人的微信名，管理微信名，openai key填写上即可
 3.  群聊需艾特机器人 输入#help查看使用教程
+
+#### 加入群聊
+加入群聊的好处：及时通知危险资讯，更新内容，解决问题
+![群聊](img/ai.png)
 
 #### 参与贡献
 
