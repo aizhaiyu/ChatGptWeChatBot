@@ -38,9 +38,9 @@ class Util:
         '''
         name=Util.get_config().name
         # @null  /img 你在干嘛 获取:/img 你在干嘛
-        prefix = f'@{name}\u2005'
+        prefix = f'@{name}'
         message = message[message.index(prefix) + len(prefix):]#去掉艾特
-        return message.replace(f'@{name} ', '')
+        return message.replace(f'\u2005', '')
     
 
     @staticmethod
