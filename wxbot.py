@@ -16,6 +16,8 @@ class WxBot:
         self.config = Util.get_config()
         self.GroupGptList=Util.get_config().GroupChatList
         self.FriendGptList=Util.get_config().FriendChatList
+        self.g_role = Util.get_config().GroupChatRole
+        self.f_role = Util.get_config().FriendChatRole
         # 初始化 ChatGpt 实例，用于群聊
         self.GroupGpt = self.set_role_model(self.config.GroupChatRole,self.config.model_name)
         # 初始化 ChatGpt 实例，用于私聊
@@ -129,7 +131,7 @@ class WxBot:
     def send_message(self, user, message):
         # 发送帮助信息
         user.send(message)
-
+        
     def process_admin_command(self, msg, result, actualNickName=None):
         fun_admin, text = result
         if actualNickName == self.config.admin:
@@ -138,7 +140,15 @@ class WxBot:
             elif fun_admin == Admin.admin_role.__name__ and text is not None:
                 # 设置角色
                 self.GroupGpt = self.set_role_model(text,self.config.model_name)
+                
                 msg.user.send("角色设置成功")
+                
+            elif fun_admin == Admin.admin_model.__name__ and text is not None:
+                self.GroupGpt = self.set_role_model(
+                    self.g_role, text)
+                self.FriendGpt = self.set_role_model(
+                    self.f_role, text)
+                msg.user.send("模型更换成功")
                 
             elif fun_admin in [
                 Admin.del_GroupChat.__name__,
@@ -203,10 +213,10 @@ class WxBot:
         itchat.run()
 
 def main():
-    pass
-    
-if __name__ == '__main__':
     base = Util.get_config().openai_api_base
     if base is not None:
         os.environ["OPENAI_API_BASE"] = base
     WxBot().run()
+    
+if __name__ == '__main__':
+    main()

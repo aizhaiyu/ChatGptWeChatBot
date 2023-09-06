@@ -4,7 +4,7 @@ class Admin:
         # 指令映射
         self.instruct = {'$role': self.admin_role, '$addGroupChat':self.add_GroupChat, \
                          '$addFriendChat':self.add_FriendChat, '$delGroupChat':self.del_GroupChat,\
-                         '$delFriendChat':self.del_FriendChat}
+                         '$delFriendChat': self.del_FriendChat, '$model': self.admin_model}
 
     def use(self, text):
         '''
@@ -32,7 +32,7 @@ class Admin:
         $addFriendChat 好友名称:添加可私聊好友
         $delGroupChat 排除群聊:从可用群聊中移除
         $delFriendChat 排除好友:排除可私聊好友
-        $drawModel 绘画模型:更改绘画使用的模型
+        $model 聊天模型:更改聊天使用的模型
         '''
         # 去除每行开头的空格
         formatted_text = '\n'.join(line.lstrip() for line in text.split('\n'))
@@ -41,6 +41,10 @@ class Admin:
     def admin_role(self, text):
         result = self.dateOp(text)
         return self.admin_role.__name__, result
+    
+    def admin_model(self, text):
+        result = self.dateOp(text)
+        return self.admin_model.__name__, result
     
     def del_FriendChat(self, text):
         result = self.dateOp(text)
