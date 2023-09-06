@@ -42,35 +42,50 @@ class WxBot:
         '''
         群聊
         '''
-        if msg.isAt:
-            
-            # for chat in itchat.get_chatrooms(update=True):
-            #     pass
-            result = Util.cleanAt(msg.text)
-            fun_name, result = self.instruct.question(result)
-            
-            logger.info(
-                f'\n发起人：{msg.actualNickName}\n内容：{msg.text}\n处理内容：{result}')
+        if not msg.isAt:
+            return None
+        
+        group_id = msg['FromUserName']
+        group = itchat.search_chatrooms(userName=group_id)
+        group_name = group.get('RemarkName', '') or group.get('NickName', '')
 
-            if fun_name == self.instruct.isImg.__name__:
-                self.sd_draw_image(msg, result, msg.actualNickName)
-            elif fun_name == self.instruct.isHelp.__name__:
-                self.send_message(msg.user, result)
-            elif fun_name == self.instruct.admin.__name__:
-                self.process_admin_command(msg, result, msg.actualNickName)
-            elif Util.check_char_in_list(result, self.config.draw):
-                self.openai_draw_image(msg, result, msg.actualNickName)
-            else:
-                self.chat_with_gpt(msg.user, result, msg.actualNickName)
+        # 判断群聊是否开启，并且是否是全部开启
+        if self.GroupGptList is not None:
+            if group_name not in self.GroupGptList:
+                return None
+            
+        result = Util.cleanAt(msg.text)
+        fun_name, result = self.instruct.question(result)
+
+        logger.info(
+            f'\n收到来自群 {group_name} 的消息\n发起人：{msg.actualNickName}\n内容：{msg.text}\n处理内容：{result}')
+
+        if fun_name == self.instruct.isImg.__name__:
+            self.sd_draw_image(msg, result, msg.actualNickName)
+        elif fun_name == self.instruct.isHelp.__name__:
+            self.send_message(msg.user, result)
+        elif fun_name == self.instruct.admin.__name__:
+            self.process_admin_command(msg, result, msg.actualNickName)
+        elif Util.check_char_in_list(result, self.config.draw):
+            self.openai_draw_image(msg, result, msg.actualNickName)
+        else:
+            self.chat_with_gpt(msg.user, result, msg.actualNickName)
+                
 
     def handle_friend_chat(self, msg):
         '''
         私聊
         '''
+        # 获取自己的 UserName
+        myUserName = itchat.get_friends(update=True)[0]["UserName"]
+        # 检查消息是否是自己发送的
+        if msg['FromUserName'] == myUserName:
+            return None
+        
         fromName = msg['User']['RemarkName']
         friend = self.FriendGptList
-        
-        if (fromName in friend) or len(friend) == 0:
+        print(msg['User']['NickName'], msg['ToUserName'])
+        if (fromName in friend) or friend is None:
             fun_name, result = self.instruct.question(msg.text)
 
             logger.info(
@@ -191,5 +206,7 @@ def main():
     pass
     
 if __name__ == '__main__':
-    os.environ["OPENAI_API_BASE"] = Util.get_config().openai_api_base
+    base = Util.get_config().openai_api_base
+    if base is not None:
+        os.environ["OPENAI_API_BASE"] = base
     WxBot().run()

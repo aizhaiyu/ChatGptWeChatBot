@@ -1,0 +1,298 @@
+2023-09-06 10:36:21,966 - login.py - INFO: Getting uuid of QR code.
+2023-09-06 10:36:22,129 - login.py - INFO: Downloading QR code.
+2023-09-06 10:36:23,000 - login.py - INFO: Please scan the QR code to log in.
+2023-09-06 10:36:33,250 - login.py - INFO: Please press confirm on your phone.
+2023-09-06 10:36:38,236 - login.py - INFO: Loading the contact, this may take a little while.
+2023-09-06 10:36:41,789 - login.py - INFO: Login successfully as 黎明时候
+2023-09-06 10:36:41,808 - register.py - INFO: Start auto replying.
+2023-09-06 10:37:48,041 - register.py - INFO: Start auto replying.
+2023-09-06 10:40:50,410 - wxbot.py - INFO: 
+私聊人：阳子
+内容：那个妹子咋了
+处理内容：那个妹子咋了
+2023-09-06 10:44:15,082 - register.py - INFO: Start auto replying.
+2023-09-06 10:58:43,216 - register.py - INFO: Start auto replying.
+2023-09-06 11:03:58,151 - register.py - INFO: Start auto replying.
+2023-09-06 11:11:35,828 - login.py - INFO: Getting uuid of QR code.
+2023-09-06 11:11:35,941 - login.py - INFO: Downloading QR code.
+2023-09-06 11:11:37,610 - login.py - INFO: Please scan the QR code to log in.
+2023-09-06 11:11:47,818 - login.py - INFO: Please press confirm on your phone.
+2023-09-06 11:11:51,307 - login.py - INFO: Loading the contact, this may take a little while.
+2023-09-06 11:11:54,997 - login.py - INFO: Login successfully as 黎明时候
+2023-09-06 11:11:55,021 - register.py - INFO: Start auto replying.
+2023-09-06 11:17:15,447 - wxbot.py - INFO: 
+私聊人：阳子
+内容：1111
+处理内容：1111
+2023-09-06 11:23:10,391 - login.py - INFO: Getting uuid of QR code.
+2023-09-06 11:23:10,508 - login.py - INFO: Downloading QR code.
+2023-09-06 11:23:11,976 - login.py - INFO: Please scan the QR code to log in.
+2023-09-06 11:23:22,224 - login.py - INFO: Please press confirm on your phone.
+2023-09-06 11:23:28,145 - login.py - INFO: Loading the contact, this may take a little while.
+2023-09-06 11:23:32,123 - login.py - INFO: Login successfully as 黎明时候
+2023-09-06 11:23:32,147 - register.py - INFO: Start auto replying.
+2023-09-06 11:26:34,063 - login.py - ERROR: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "D:\Program Files\python3\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "D:\Program Files\python3\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "D:\Program Files\python3\lib\http\client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 295, in maintain_loop
+    msgList, contactList = self.get_msg()
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 382, in get_msg
+    r = self.s.post(url, data=json.dumps(data),
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 635, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 559, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+2023-09-06 11:27:47,451 - login.py - ERROR: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "D:\Program Files\python3\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "D:\Program Files\python3\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "D:\Program Files\python3\lib\http\client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 295, in maintain_loop
+    msgList, contactList = self.get_msg()
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 382, in get_msg
+    r = self.s.post(url, data=json.dumps(data),
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 635, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 559, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+2023-09-06 11:29:11,698 - login.py - ERROR: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "D:\Program Files\python3\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "D:\Program Files\python3\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "D:\Program Files\python3\lib\http\client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 295, in maintain_loop
+    msgList, contactList = self.get_msg()
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 382, in get_msg
+    r = self.s.post(url, data=json.dumps(data),
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 635, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 559, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+2023-09-06 11:31:47,121 - login.py - ERROR: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "D:\Program Files\python3\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "D:\Program Files\python3\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "D:\Program Files\python3\lib\http\client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 295, in maintain_loop
+    msgList, contactList = self.get_msg()
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 382, in get_msg
+    r = self.s.post(url, data=json.dumps(data),
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 635, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 559, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+2023-09-06 11:32:18,507 - login.py - ERROR: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "D:\Program Files\python3\lib\http\client.py", line 1374, in getresponse
+    response.begin()
+  File "D:\Program Files\python3\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "D:\Program Files\python3\lib\http\client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "D:\Program Files\python3\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 295, in maintain_loop
+    msgList, contactList = self.get_msg()
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\login.py", line 382, in get_msg
+    r = self.s.post(url, data=json.dumps(data),
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 635, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Program Files\python3\lib\site-packages\requests\adapters.py", line 559, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='wx2.qq.com', port=443): Max retries exceeded with url: /cgi-bin/mmwebwx-bin/webwxsync?sid=dFGDFPc6+7LisUon&skey=@crypt_8b6fee34_7efe86aaebee6e85f5da23057c8c8614&pass_ticket=Rn3cBrOre7MQqpB63B7JlaPmFgQjsLI01UMRh0jH7lMYcmnkgf28HwSIvQwAd7otIJFt9JmCW6e%2FnzLOUaNHvA%3D%3D (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))
+
+2023-09-06 11:34:05,088 - register.py - INFO: Start auto replying.
+2023-09-06 11:36:08,930 - register.py - INFO: Start auto replying.
+2023-09-06 11:39:47,833 - register.py - INFO: Start auto replying.
+2023-09-06 12:05:43,047 - register.py - INFO: Start auto replying.
+2023-09-06 12:06:12,876 - wxbot.py - INFO: 
+发起人：null
+内容：@黎明时候 你好
+处理内容：你好
+2023-09-06 12:09:52,583 - wxbot.py - INFO: 
+发起人：null
+内容：@黎明时候 你好
+处理内容：你好
+2023-09-06 12:10:26,712 - register.py - INFO: Start auto replying.
+2023-09-06 12:22:12,079 - register.py - INFO: Start auto replying.
+2023-09-06 12:22:57,448 - register.py - WARNING: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\register.py", line 60, in configured_reply
+    r = replyFn(msg)
+  File "e:\wolfman\programData\python\chatgpt\chatBot\chatBot\wxbot.py", line 189, in text_GroupChat
+    self.handle_group_chat(msg)
+  File "e:\wolfman\programData\python\chatgpt\chatBot\chatBot\wxbot.py", line 52, in handle_group_chat
+    if (group_name not in self.GroupGptList) and self.GroupGptList is not None:
+TypeError: argument of type 'NoneType' is not iterable
+
+2023-09-06 12:55:35,380 - login.py - INFO: Getting uuid of QR code.
+2023-09-06 12:55:35,498 - login.py - INFO: Downloading QR code.
+2023-09-06 12:55:36,302 - login.py - INFO: Please scan the QR code to log in.
+2023-09-06 12:55:46,560 - login.py - INFO: Please press confirm on your phone.
+2023-09-06 12:55:52,546 - login.py - INFO: Loading the contact, this may take a little while.
+2023-09-06 12:55:56,452 - login.py - INFO: Login successfully as 黎明时候
+2023-09-06 12:55:56,483 - register.py - INFO: Start auto replying.
+2023-09-06 12:56:28,134 - register.py - WARNING: Traceback (most recent call last):
+  File "D:\Program Files\python3\lib\site-packages\itchat\components\register.py", line 60, in configured_reply
+    r = replyFn(msg)
+  File "e:\wolfman\programData\python\chatgpt\chatBot\chatBot\wxbot.py", line 191, in text_GroupChat
+    self.handle_group_chat(msg)
+  File "e:\wolfman\programData\python\chatgpt\chatBot\chatBot\wxbot.py", line 54, in handle_group_chat
+    if (group_name not in self.GroupGptList) and self.GroupGptList is not None:
+TypeError: argument of type 'NoneType' is not iterable
+
+2023-09-06 12:57:00,354 - register.py - INFO: Start auto replying.
+2023-09-06 12:58:58,501 - register.py - INFO: Start auto replying.
+2023-09-06 12:59:43,048 - wxbot.py - INFO: 
+收到来自群 测试群 的消息 发起人：null
+内容：@黎明时候 u
+处理内容：u
