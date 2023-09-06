@@ -14,8 +14,7 @@ class Admin:
         Returns:
             string
         '''
-        #判断是否包含指令
-        # 去掉前面的空格
+        # 判断是否包含指令，去掉前面的空格
         result = text.lstrip()
         for key in self.instruct.keys():
             if result.find(key) != -1:
@@ -64,10 +63,7 @@ class Admin:
     def dateOp(self, text):
         if text.startswith(text):
             index = text.find(text)
-            if index != -1:
-                result = text[index + len(text):].strip()
-                return result
-            return None
+            return text[index + len(text):].strip() if index != -1 else None
 
 
 

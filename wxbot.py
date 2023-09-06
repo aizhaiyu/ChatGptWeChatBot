@@ -17,26 +17,26 @@ class WxBot:
         self.GroupGptList=Util.get_config().GroupChatList
         self.FriendGptList=Util.get_config().FriendChatList
         # 初始化 ChatGpt 实例，用于群聊
-        self.GroupGpt = ChatGpt(
-            self.config.openai_api_key[0],
-            role=self.config.GroupChatRole,
-            openai_api_base=self.config.openai_api_base,
-            temperature=self.config.temperature,
-            model=self.config.model_name
-        )
+        self.GroupGpt = self.set_role_model(self.config.GroupChatRole,self.config.model_name)
         # 初始化 ChatGpt 实例，用于私聊
-        self.FriendGpt = ChatGpt(
-            self.config.openai_api_key[0],
-            role=self.config.FriendChatRole,
-            openai_api_base=self.config.openai_api_base,
-            temperature=self.config.temperature,
-            model=self.config.model_name
-        )
+        self.FriendGpt = self.set_role_model(self.config.FriendChatRole,self.config.model_name)
         # 初始化 DrawingGenerator 实例，用于生成绘图
         self.Draw = DrawingGenerator(
             self.config.openai_api_key[0], self.config.openai_api_base)
         
         self.key = iter(Util.get_ai_key())
+        
+    def set_role_model(self, role,model_name):
+        '''
+        设置角色or模型
+        '''
+        return ChatGpt(
+            self.config.openai_api_key[0],
+            role=role,
+            openai_api_base=self.config.openai_api_base,
+            temperature=self.config.temperature,
+            model=model_name
+        )
 
     def handle_group_chat(self, msg):
         '''
@@ -96,22 +96,20 @@ class WxBot:
         txt = f'@{actualNickName}\u2005 绘图成功 \n耗时：{time_diff.total_seconds()}秒'
         logger.info(txt)
         msg.user.send(txt)
-        msg.user.send(f'@img@./img/sd.png')
+        msg.user.send('@img@./img/sd.png')
 
     def openai_draw_image(self, msg, result, actualNickName=None):
         # 生成绘图
         current_time = datetime.now()
         result = self.Draw.generate_drawing(result)
-        key = next(self.key, None)
-        if key is not None:
-            self.Draw.api_key = key
+        self.Draw.api_key = next(self.key)#轮询
         Common().dowImg(result)
         new_time = datetime.now()
         time_diff = new_time - current_time
         txt = f'@{actualNickName}\u2005 绘图成功 \n耗时：{time_diff.total_seconds()}秒'
         logger.info(txt)
         msg.user.send(txt)
-        msg.user.send(f'@img@./img/sd.png')
+        msg.user.send('@img@./img/sd.png')
 
     def send_message(self, user, message):
         # 发送帮助信息
@@ -124,11 +122,18 @@ class WxBot:
                 msg.user.send(text)
             elif fun_admin == Admin.admin_role.__name__ and text is not None:
                 # 设置角色
-                self.GroupGpt.role = text
+                self.GroupGpt = self.set_role_model(text,self.config.model_name)
                 msg.user.send("角色设置成功")
-            elif fun_admin == Admin.del_GroupChat.__name__ or fun_admin == Admin.del_FriendChat.__name__:
+                
+            elif fun_admin in [
+                Admin.del_GroupChat.__name__,
+                Admin.del_FriendChat.__name__,
+            ]:
                 self.del_list(fun_admin, text)
-            elif fun_admin == Admin.add_FriendChat.__name__ or fun_admin == Admin.add_GroupChat.__name__:
+            elif fun_admin in [
+                Admin.add_FriendChat.__name__,
+                Admin.add_GroupChat.__name__,
+            ]:
                 self.add_list(fun_admin, text)
             else:
                 msg.user.send("设置失败或指令错误")
@@ -153,13 +158,13 @@ class WxBot:
     
 
     def chat_with_gpt(self, user, message, actualNickName=None):
-        key = next(self.key, None)
-        if key is not None:
-            os.environ["OPENAI_API_KEY"] = key
+        key=next(self.key)
+        print(key)
+        os.environ["OPENAI_API_KEY"] = key#轮询
         # 使用 GPT 进行聊天
         if actualNickName is not None:
             res = self.GroupGpt.chat_ai_usage(message)
-            user.send(f'@{actualNickName}\u2005 \n{res}')
+            user.send(f'@{actualNickName}\u2005\n{res}')
         else:
             res = self.FriendGpt.chat_ai_usage(message)
             user.send(res)
@@ -179,7 +184,7 @@ class WxBot:
         except Exception as e:
             logger.exception(f'An error occurred:{e}')
 
-        itchat.auto_login(hotReload=True)
+        itchat.auto_login(hotReload=True,enableCmdQR=self.config.system)
         itchat.run()
 
 def main():

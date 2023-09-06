@@ -1,5 +1,3 @@
-import os
-# from interfaces.Itchat import WeChatBotWrapper
 from config.config import Config
 from utils.generateList import GenerateList
 import requests
@@ -12,7 +10,7 @@ class Util:
     @staticmethod
     def get_config():
         if Util._config is None:
-            Util._config = Config()  # Replace 'config/config.yaml' with your actual path
+            Util._config = Config()
         return Util._config
     
     @staticmethod
@@ -20,16 +18,14 @@ class Util:
         '''
         使用方法：\n
         while True:\n
-        key = next(generator)\n
-        if key is not None:\n
+            key = next(generator)\n
             print("key:", key)
         '''
         if Util._ai_key is None:
             con=Util.get_config()
-            Util._ai_key = GenerateList(con.openai_api_key,con.threshold).generate_list
+            Util._ai_key = GenerateList(con.openai_api_key,con.threshold).next_item
         return Util._ai_key
     
-    # WeChatBot=WeChatBotWrapper()
     
     @staticmethod
     def cleanAt(message):
@@ -38,9 +34,9 @@ class Util:
         '''
         name=Util.get_config().name
         # @null  /img 你在干嘛 获取:/img 你在干嘛
-        prefix = f'@{name}\u2005'
+        prefix = f'@{name}'
         message = message[message.index(prefix) + len(prefix):]#去掉艾特
-        return message.replace(f'@{name} ', '')
+        return message.replace(f'\u2005', '')
     
 
     @staticmethod
