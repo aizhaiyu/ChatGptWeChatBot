@@ -15,10 +15,6 @@ class Config:
         return self.config_data['wx_bot']['admin']
 
     @property
-    def name(self):
-        return self.config_data['wx_bot']['name']
-
-    @property
     def threshold(self):
         return self.config_data['openai']['threshold']
 

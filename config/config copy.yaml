@@ -3,7 +3,6 @@ system: false
 #微信名
 wx_bot:
   admin: 黎明时候是管理 #机器人微信好友列表备注名 管理员
-  name: 'null' #机器人微信昵称
   chat:
     #是否开启群聊/私聊：True开启、False关闭
     isGroupChat: True

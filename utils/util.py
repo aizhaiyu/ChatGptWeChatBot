@@ -28,11 +28,11 @@ class Util:
     
     
     @staticmethod
-    def cleanAt(message):
+    def cleanAt(itchat, message):
         '''
         # 去除@符号和名称
         '''
-        name=Util.get_config().name
+        name = itchat.get_friends(update=True)[0]["NickName"]
         # @null  /img 你在干嘛 获取:/img 你在干嘛
         prefix = f'@{name}'
         message = message[message.index(prefix) + len(prefix):]#去掉艾特
