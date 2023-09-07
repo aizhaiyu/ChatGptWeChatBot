@@ -65,9 +65,14 @@ class Admin:
     
     
     def dateOp(self, text):
-        if text.startswith(text):
-            index = text.find(text)
-            return text[index + len(text):].strip() if index != -1 else None
+        if not text or not isinstance(text, str):
+            return ""
+
+        space_index = text.find(' ')
+        if space_index != -1:
+            return text[space_index + 1:].lstrip()
+        else:
+            return text
 
 
 

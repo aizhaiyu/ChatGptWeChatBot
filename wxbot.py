@@ -14,8 +14,9 @@ class WxBot:
     def __init__(self):
         self.instruct = Instruct()
         self.config = Util.get_config()
-        self.GroupGptList=Util.get_config().GroupChatList
-        self.FriendGptList=Util.get_config().FriendChatList
+        self.GroupGptList = [] if Util.get_config(
+            ).GroupChatList is None else Util.get_config().GroupChatList
+        self.FriendGptList=Util.get_config().FriendChatList or []
         self.g_role = Util.get_config().GroupChatRole
         self.f_role = Util.get_config().FriendChatRole
         # 初始化 ChatGpt 实例，用于群聊
@@ -52,11 +53,11 @@ class WxBot:
         group_name = group.get('RemarkName', '') or group.get('NickName', '')
 
         # 判断群聊是否开启，并且是否是全部开启
-        if self.GroupGptList is not None:
+        if len(self.GroupGptList)!=0:
             if group_name not in self.GroupGptList:
                 return None
             
-        result = Util.cleanAt(msg.text)
+        result = Util.cleanAt(itchat, msg.text)
         fun_name, result = self.instruct.question(result)
 
         logger.info(
@@ -84,9 +85,8 @@ class WxBot:
         if msg['FromUserName'] == myUserName:
             return None
         
-        fromName = msg['User']['RemarkName']
+        fromName = msg['User']['RemarkName'] or msg['User']['NickName']
         friend = self.FriendGptList
-        print(msg['User']['NickName'], msg['ToUserName'])
         if (fromName in friend) or friend is None:
             fun_name, result = self.instruct.question(msg.text)
 
@@ -139,15 +139,24 @@ class WxBot:
                 msg.user.send(text)
             elif fun_admin == Admin.admin_role.__name__ and text is not None:
                 # 设置角色
-                self.GroupGpt = self.set_role_model(text,self.config.model_name)
+                if actualNickName is None:
+                    self.GroupGpt = self.set_role_model(
+                        text, self.config.model_name)
+                else:
+                    self.GroupGpt = self.set_role_model(
+                        text, self.config.model_name)
+                    
                 
                 msg.user.send("角色设置成功")
                 
             elif fun_admin == Admin.admin_model.__name__ and text is not None:
-                self.GroupGpt = self.set_role_model(
-                    self.g_role, text)
-                self.FriendGpt = self.set_role_model(
-                    self.f_role, text)
+                
+                if actualNickName is None:
+                    self.FriendGpt = self.set_role_model(
+                        self.f_role, text)
+                else:
+                    self.GroupGpt = self.set_role_model(
+                        self.g_role, text)
                 msg.user.send("模型更换成功")
                 
             elif fun_admin in [
@@ -155,11 +164,13 @@ class WxBot:
                 Admin.del_FriendChat.__name__,
             ]:
                 self.del_list(fun_admin, text)
+                msg.user.send(f"去除{text}成功")
             elif fun_admin in [
                 Admin.add_FriendChat.__name__,
                 Admin.add_GroupChat.__name__,
             ]:
                 self.add_list(fun_admin, text)
+                msg.user.send(f"添加{text}成功")
             else:
                 msg.user.send("设置失败或指令错误")
         else:
@@ -175,6 +186,7 @@ class WxBot:
             return self.GroupGptList
         
     def add_list(self,type,item):
+        print(self.FriendGptList)
         if type == Admin.add_FriendChat.__name__:
             self.FriendGptList.append(item)
         else:
