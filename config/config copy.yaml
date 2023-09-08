@@ -2,7 +2,10 @@
 system: false
 #微信名
 wx_bot:
-  admin: 黎明时候是管理 #机器人微信好友列表备注名 管理员
+  #机器人微信好友列表备注名 管理员 如果在群聊设置了备注请使用请也填写群聊备注名 可多个管理
+  admin: 
+   - 黎明时候是管理
+   - 黎明时候
   chat:
     #是否开启群聊/私聊：True开启、False关闭
     isGroupChat: True

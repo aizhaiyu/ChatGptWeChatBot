@@ -55,8 +55,8 @@ class WxBot:
         # 判断群聊是否开启，并且是否是全部开启
         if len(self.GroupGptList)!=0:
             if group_name not in self.GroupGptList:
-                return None
-            
+                return None 
+        
         result = Util.cleanAt(itchat, msg.text)
         fun_name, result = self.instruct.question(result)
 
@@ -134,47 +134,51 @@ class WxBot:
         
     def process_admin_command(self, msg, result, actualNickName=None):
         fun_admin, text = result
-        if actualNickName == self.config.admin:
-            if fun_admin == Admin.admin.__name__:
-                msg.user.send(text)
-            elif fun_admin == Admin.admin_role.__name__ and text is not None:
-                # 设置角色
-                if actualNickName is None:
-                    self.GroupGpt = self.set_role_model(
-                        text, self.config.model_name)
-                else:
-                    self.GroupGpt = self.set_role_model(
-                        text, self.config.model_name)
+        # 获取发起人的 UserName是否为管理
+        name=msg['ActualUserName']
+        if not self.get_friend_info(name):
+            msg.user.send("权限不足")
+            return None
+            
+        if fun_admin == Admin.admin.__name__:
+            msg.user.send(text)
+        elif fun_admin == Admin.admin_role.__name__ and text is not None:
+            # 设置角色
+            if actualNickName is None:
+                self.GroupGpt = self.set_role_model(
+                    text, self.config.model_name)
+            else:
+                self.GroupGpt = self.set_role_model(
+                    text, self.config.model_name)
                     
                 
-                msg.user.send("角色设置成功")
+            msg.user.send("角色设置成功")
                 
-            elif fun_admin == Admin.admin_model.__name__ and text is not None:
+        elif fun_admin == Admin.admin_model.__name__ and text is not None:
                 
-                if actualNickName is None:
-                    self.FriendGpt = self.set_role_model(
-                        self.f_role, text)
-                else:
-                    self.GroupGpt = self.set_role_model(
-                        self.g_role, text)
-                msg.user.send("模型更换成功")
-                
-            elif fun_admin in [
-                Admin.del_GroupChat.__name__,
-                Admin.del_FriendChat.__name__,
-            ]:
-                self.del_list(fun_admin, text)
-                msg.user.send(f"去除{text}成功")
-            elif fun_admin in [
-                Admin.add_FriendChat.__name__,
-                Admin.add_GroupChat.__name__,
-            ]:
-                self.add_list(fun_admin, text)
-                msg.user.send(f"添加{text}成功")
+            if actualNickName is None:
+                self.FriendGpt = self.set_role_model(
+                    self.f_role, text)
             else:
-                msg.user.send("设置失败或指令错误")
+                self.GroupGpt = self.set_role_model(
+                    self.g_role, text)
+            msg.user.send("模型更换成功")
+                
+        elif fun_admin in [
+            Admin.del_GroupChat.__name__,
+            Admin.del_FriendChat.__name__,
+            ]:
+            self.del_list(fun_admin, text)
+            msg.user.send(f"去除{text}成功")
+        elif fun_admin in [
+            Admin.add_FriendChat.__name__,
+            Admin.add_GroupChat.__name__,
+            ]:
+            self.add_list(fun_admin, text)
+            msg.user.send(f"添加{text}成功")
         else:
-            msg.user.send("权限不足")
+            msg.user.send("设置失败或指令错误")
+        
             
             
     def del_list(self,type,item):
@@ -184,7 +188,7 @@ class WxBot:
         else:
             self.GroupGptList = [x for x in self.GroupGptList if x != item]
             return self.GroupGptList
-        
+    
     def add_list(self,type,item):
         print(self.FriendGptList)
         if type == Admin.add_FriendChat.__name__:
@@ -205,7 +209,19 @@ class WxBot:
         else:
             res = self.FriendGpt.chat_ai_usage(message)
             user.send(res)
-
+            
+    def get_friend_info(self,username):
+        '''
+        usernanme找查好友是否为管理
+        '''
+        friend = itchat.search_friends(userName=username)
+        if friend:
+            name = friend["RemarkName"] or friend["NickName"]
+            if name in self.config.admin:
+                return True
+        else:
+            return False
+        
     def run(self):
         try:
             # 注册群聊消息处理函数
