@@ -1,4 +1,4 @@
-import itchat
+from lib import itchat
 from utils.instruct import Instruct
 from datetime import datetime, timedelta
 from plugins.openai.role import ChatGpt, DrawingGenerator
@@ -150,12 +150,9 @@ class WxBot:
             else:
                 self.GroupGpt = self.set_role_model(
                     text, self.config.model_name)
-                    
-                
             msg.user.send("角色设置成功")
                 
         elif fun_admin == Admin.admin_model.__name__ and text is not None:
-                
             if actualNickName is None:
                 self.FriendGpt = self.set_role_model(
                     self.f_role, text)
