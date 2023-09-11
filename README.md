@@ -1,10 +1,12 @@
 # ChatGptWeChatBot
 
 #### 介绍
-基于openai chatgpt的微信机器人，支持key轮询，openai绘图，sd绘图，私聊群聊，自定义角色
+基于openai chatgpt的微信机器人，支持key轮询，openai绘图，sd绘图，私聊群聊，自定义角色等。
+随着人工智能的出现，越来越多
 
 ### 环境
 平台：Windows/liunx
+
 python版本`>=3.8.1<4.0`
 
 #### 软件架构
