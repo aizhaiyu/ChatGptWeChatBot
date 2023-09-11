@@ -1,0 +1,3 @@
+import wxbot
+
+wxbot.main()
