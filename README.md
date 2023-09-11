@@ -3,6 +3,10 @@
 #### 介绍
 基于openai chatgpt的微信机器人，支持key轮询，openai绘图，sd绘图，私聊群聊，自定义角色
 
+### 环境
+平台：Windows/liunx
+python版本`>=3.8.1<4.0`
+
 #### 软件架构
 本项目使用了itchat的库，以及langchain作为主要对接。
 - admin
@@ -14,6 +18,7 @@
 - docs 文档加载
 - img 图片绘画存放位置
 - logs 日志
+- lib 依赖包
 - plugins 功能插件
 - utils 常用功能
 - wxbot.py 微信机器人主要实现
@@ -25,15 +30,16 @@
 
 #### 安装教程
 
-1.  进入目录chatgptWxBot
-2.  安装需要的库
+1.  安装python *>=3.8.1<4.0* 版本
+2.  进入项目目录chatgptWxBot
+3.  控制台安装需要的库
     `pip install -r requirements.txt`
-3.  运行wxbot.py文件
+4.  运行app.py文件
 
 #### 使用说明
 
 1.  先更改config/config copy.yaml文件名重命名为config.yaml
-2.  打开config.yaml配置文件，将自己机器人的微信名，管理微信名，openai key填写上即可
+2.  打开config.yaml配置文件，将管理员微信名，openai key填写上即可
 3.  群聊需艾特机器人 输入#help查看使用教程
 
 #### 加入群聊
