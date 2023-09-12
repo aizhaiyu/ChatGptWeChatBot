@@ -7,7 +7,7 @@ if ASYNC_COMPONENTS:
 else:
     from itchat.components import load_components
 
-
+ 
 __version__ = VERSION
 
 
