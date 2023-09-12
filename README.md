@@ -2,9 +2,9 @@
 
 #### 介绍
 基于openai chatgpt的微信机器人，支持key轮询，openai绘图，sd绘图，私聊群聊，自定义角色等。
-随着人工智能的出现，越来越多
 
-### 环境
+### 运行环境
+
 平台：Windows/liunx
 
 python版本`>=3.8.1<4.0`
@@ -25,28 +25,30 @@ python版本`>=3.8.1<4.0`
 - utils 常用功能
 - wxbot.py 微信机器人主要实现
 
-#### 使用截图
-![使用](img/%E4%BD%BF%E7%94%A8.jpg)
-![功能](img/%E5%8A%9F%E8%83%BD.jpg)
-![管理](img/%E7%AE%A1%E7%90%86.jpg)
-
 #### 安装教程
 
-1.  安装python *>=3.8.1<4.0* 版本
-2.  进入项目目录chatgptWxBot
-3.  控制台安装需要的库
+1. 安装python *>=3.8.1<4.0* 版本
+2. 进入项目目录chatgptWxBot
+3. 控制台安装需要的库
     `pip install -r requirements.txt`
-4.  运行app.py文件
+4. 运行app.py文件
 
 #### 使用说明
 
-1.  先更改config/config copy.yaml文件名重命名为config.yaml
-2.  打开config.yaml配置文件，将管理员微信名，openai key填写上即可
-3.  群聊需艾特机器人 输入#help查看使用教程
+1. 先更改config/config copy.yaml文件名重命名为config.yaml
+2. 打开config.yaml配置文件，将管理员微信名，openai key填写上即可
+3. 群聊需艾特机器人 输入#help查看使用教程
+
+#### 使用截图
+![img](img/%E4%BD%BF%E7%94%A8.jpg)
+![img](img/%E5%8A%9F%E8%83%BD.jpg)
+![img](img/%E7%AE%A1%E7%90%86.jpg)
+
 
 #### 加入群聊
 加入群聊的好处：及时通知危险资讯，更新内容，解决问题
-![群聊](img/ai.png)
+
+![img](img/ai.png)
 
 #### 参与贡献
 
@@ -54,3 +56,10 @@ python版本`>=3.8.1<4.0`
 2.  新建 Feat_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
+
+
+<style>
+    img[alt="img"]{
+        width:250px;
+    }
+</style>
