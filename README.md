@@ -44,7 +44,7 @@ python版本`>=3.8.1<4.0`
 <img src="img/%E4%BD%BF%E7%94%A8.jpg" width="200">
 <img src="img/%E5%8A%9F%E8%83%BD.jpg" width="200">
 <img src="img/%E7%AE%A1%E7%90%86.jpg" width="200">
-
+ 
 #### 加入群聊
 加入群聊的好处：及时通知危险资讯，更新内容，解决问题
 
