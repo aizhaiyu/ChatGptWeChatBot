@@ -3,11 +3,11 @@ from .config import VERSION, ASYNC_COMPONENTS
 from .log import set_logging
 
 if ASYNC_COMPONENTS:
-    from itchat.async_components import load_components
+    from .async_components import load_components
 else:
-    from itchat.components import load_components
+    from .components import load_components
 
-
+ 
 __version__ = VERSION
 
 
@@ -19,7 +19,7 @@ def load_async_itchat() -> Core:
     Returns:
         Core: the abstract interface of itchat
     """
-    from itchat.async_components import load_components
+    from .async_components import load_components
     load_components(Core)
     return Core()
 
@@ -30,7 +30,7 @@ def load_sync_itchat() -> Core:
     Returns:
         Core: the abstract interface of itchat
     """
-    from itchat.components import load_components
+    from .components import load_components
     load_components(Core)
     return Core()
 
