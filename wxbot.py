@@ -1,3 +1,4 @@
+# coding:utf-8
 from lib import itchat
 from utils.instruct import Instruct
 from datetime import datetime, timedelta
@@ -73,7 +74,12 @@ class WxBot:
             self.openai_draw_image(msg, result, msg.actualNickName)
         else:
             self.chat_with_gpt(msg.user, result, msg.actualNickName)
-                
+    
+    def welcome_group_chat(self, msg):
+        '''
+        群聊欢迎监听
+        '''
+        print(msg)
 
     def handle_friend_chat(self, msg):
         '''
@@ -196,6 +202,14 @@ class WxBot:
     
 
     def chat_with_gpt(self, user, message, actualNickName=None):
+        """
+        使用 GPT 模型来回复消息。
+
+        参数:
+        user: 发送消息的用户对象。
+        message (str): 用户发送的消息文本。
+        actualNickName (str, 可选): 发送消息的用户的昵称。
+        """
         key=next(self.key)
         print(key)
         os.environ["OPENAI_API_KEY"] = key#轮询
@@ -225,6 +239,10 @@ class WxBot:
             @itchat.msg_register('Text', isGroupChat=self.config.isGroupChat)
             def text_GroupChat(msg):
                 self.handle_group_chat(msg)
+            # # 注册欢迎群聊消息处理函数
+            # @itchat.msg_register('Note', isGroupChat=self.config.isGroupChat)
+            # def welcome_GroupChat(msg):
+            #     self.welcome_group_chat(msg)
 
             # 注册私聊消息处理函数
             @itchat.msg_register('Text', isFriendChat=self.config.isFriendChat)

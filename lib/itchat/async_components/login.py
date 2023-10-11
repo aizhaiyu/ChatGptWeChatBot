@@ -163,8 +163,8 @@ async def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, qrCallback=Non
             f.write(qrStorage.getvalue())
         if enableCmdQR:
             utils.print_cmd_qr(qrCode.text(1), enableCmdQR=enableCmdQR)
-        else:
-            utils.print_qr(picDir)
+        # else:
+        #     utils.print_qr(picDir)
     return qrStorage
 
 async def check_login(self, uuid=None):

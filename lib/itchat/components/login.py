@@ -56,7 +56,7 @@ def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
                                     picDir=picDir, qrCallback=qrCallback)
             logger.info('Please scan the QR code to log in.')
         isLoggedIn = False
-        time.sleep(10)
+        time.sleep(15)
         while not isLoggedIn:
             status = self.check_login()
             if hasattr(qrCallback, '__call__'):
@@ -133,8 +133,8 @@ def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, qrCallback=None):
             f.write(qrStorage.getvalue())
         if enableCmdQR:
             utils.print_cmd_qr(qrCode.text(1), enableCmdQR=enableCmdQR)
-        else:
-            utils.print_qr(picDir)
+        # else:
+        #     utils.print_qr(picDir)
     return qrStorage
 
 
