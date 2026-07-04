@@ -2,7 +2,8 @@
 itchat.pkl
 config.yaml
 __pycache__
+data/
+QR.png
 
 #忽略目录下的所有文件
 #docs/*
-

@@ -1,6 +1,10 @@
 import logging
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 def setup_logging(log_file):
+    log_path = Path(log_file)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     # 创建日志器
     logger = logging.getLogger()
     # 设置日志级别
@@ -14,7 +18,12 @@ def setup_logging(log_file):
          logger.addHandler(sh)
 
          # 创建文件处理器
-         fh = logging.FileHandler(log_file, encoding='utf-8')
+         fh = RotatingFileHandler(
+             log_path,
+             maxBytes=5 * 1024 * 1024,
+             backupCount=3,
+             encoding='utf-8',
+         )
          # 将文件处理器放到日志器中
          logger.addHandler(fh)
 

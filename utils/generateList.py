@@ -2,6 +2,11 @@ import time
 
 class GenerateList:
     def __init__(self, data_list, threshold):
+        if not data_list:
+            raise ValueError("data_list 不能为空")
+        if threshold < 1:
+            raise ValueError("threshold 必须大于等于 1")
+
         self.data_list = data_list
         self.threshold = threshold
         self.count = 0  # 记录当前阈值内执行次数

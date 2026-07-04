@@ -1,46 +1,29 @@
 # coding:utf-8
 from lib import itchat
 from utils.instruct import Instruct
-from datetime import datetime, timedelta
-from plugins.openai.role import ChatGpt, DrawingGenerator
+from datetime import datetime
+from time import sleep
+from plugins.openai.role import DrawingGenerator, normalize_openai_base_url
 from utils.util import Common, Util
-from admin.admin import Admin
+from utils.message import split_chat_reply
+from services.admin_service import AdminService
+from services.chat_service import ChatService
 import config.log
-import os
 
 logger = config.log.setup_logging("logs/app.log")
+
+REPLY_PART_DELAY_SECONDS = 0.8
 
 
 class WxBot:
     def __init__(self):
         self.instruct = Instruct()
         self.config = Util.get_config()
-        self.GroupGptList = [] if Util.get_config(
-            ).GroupChatList is None else Util.get_config().GroupChatList
-        self.FriendGptList=Util.get_config().FriendChatList or []
-        self.g_role = Util.get_config().GroupChatRole
-        self.f_role = Util.get_config().FriendChatRole
-        # 初始化 ChatGpt 实例，用于群聊
-        self.GroupGpt = self.set_role_model(self.config.GroupChatRole,self.config.model_name)
-        # 初始化 ChatGpt 实例，用于私聊
-        self.FriendGpt = self.set_role_model(self.config.FriendChatRole,self.config.model_name)
-        # 初始化 DrawingGenerator 实例，用于生成绘图
+        self.chat_service = ChatService(self.config)
+        self.admin_service = AdminService(self.config, self.chat_service)
         self.Draw = DrawingGenerator(
             self.config.openai_api_key[0], self.config.openai_api_base)
-        
         self.key = iter(Util.get_ai_key())
-        
-    def set_role_model(self, role,model_name):
-        '''
-        设置角色or模型
-        '''
-        return ChatGpt(
-            self.config.openai_api_key[0],
-            role=role,
-            openai_api_base=self.config.openai_api_base,
-            temperature=self.config.temperature,
-            model=model_name
-        )
 
     def handle_group_chat(self, msg):
         '''
@@ -54,9 +37,9 @@ class WxBot:
         group_name = group.get('RemarkName', '') or group.get('NickName', '')
 
         # 判断群聊是否开启，并且是否是全部开启
-        if len(self.GroupGptList)!=0:
-            if group_name not in self.GroupGptList:
-                return None 
+        if not self.admin_service.is_group_enabled(group_name):
+            logger.info(f'\n群聊 {group_name} 不在启用列表，已忽略')
+            return None
         
         result = Util.cleanAt(itchat, msg.text)
         fun_name, result = self.instruct.question(result)
@@ -69,17 +52,19 @@ class WxBot:
         elif fun_name == self.instruct.isHelp.__name__:
             self.send_message(msg.user, result)
         elif fun_name == self.instruct.admin.__name__:
-            self.process_admin_command(msg, result, msg.actualNickName)
+            self.process_admin_command(msg, result, is_group=True)
         elif Util.check_char_in_list(result, self.config.draw):
             self.openai_draw_image(msg, result, msg.actualNickName)
         else:
-            self.chat_with_gpt(msg.user, result, msg.actualNickName)
+            session_id = self.build_group_session_id(group_id, msg['ActualUserName'])
+            display_name = f"{group_name}/{msg.actualNickName}"
+            self.chat_with_gpt(msg.user, result, msg.actualNickName, session_id, display_name)
     
     def welcome_group_chat(self, msg):
         '''
         群聊欢迎监听
         '''
-        print(msg)
+        logger.info("收到群聊通知消息：%s", msg)
 
     def handle_friend_chat(self, msg):
         '''
@@ -92,23 +77,25 @@ class WxBot:
             return None
         
         fromName = msg['User']['RemarkName'] or msg['User']['NickName']
-        friend = self.FriendGptList
-        if (fromName in friend) or friend is None:
-            fun_name, result = self.instruct.question(msg.text)
+        if not self.admin_service.is_friend_enabled(fromName):
+            logger.info(f'\n私聊人 {fromName} 不在启用列表，已忽略')
+            return None
 
-            logger.info(
-                f'\n私聊人：{fromName}\n内容：{msg.text}\n处理内容：{result}')
+        fun_name, result = self.instruct.question(msg.text)
 
-            if fun_name == self.instruct.isImg.__name__:
-                self.sd_draw_image(msg, result)
-            elif fun_name == self.instruct.isHelp.__name__:
-                self.send_message(msg.user, result)
-            elif fun_name == self.instruct.admin.__name__:
-                self.process_admin_command(msg, result, fromName)
-            elif Util.check_char_in_list(result, self.config.draw):
-                self.openai_draw_image(msg, result)
-            else:
-                self.chat_with_gpt(msg.user, result)
+        logger.info(
+            f'\n私聊人：{fromName}\n内容：{msg.text}\n处理内容：{result}')
+
+        if fun_name == self.instruct.isImg.__name__:
+            self.sd_draw_image(msg, result)
+        elif fun_name == self.instruct.isHelp.__name__:
+            self.send_message(msg.user, result)
+        elif fun_name == self.instruct.admin.__name__:
+            self.process_admin_command(msg, result, is_group=False)
+        elif Util.check_char_in_list(result, self.config.draw):
+            self.openai_draw_image(msg, result)
+        else:
+            self.chat_with_gpt(msg.user, result, session_id=msg['FromUserName'], display_name=fromName)
 
     def sd_draw_image(self, msg, result, actualNickName=None):
         # 下载图片
@@ -124,8 +111,8 @@ class WxBot:
     def openai_draw_image(self, msg, result, actualNickName=None):
         # 生成绘图
         current_time = datetime.now()
+        self.Draw.set_api_key(next(self.key))
         result = self.Draw.generate_drawing(result)
-        self.Draw.api_key = next(self.key)#轮询
         Common().dowImg(result)
         new_time = datetime.now()
         time_diff = new_time - current_time
@@ -138,70 +125,19 @@ class WxBot:
         # 发送帮助信息
         user.send(message)
         
-    def process_admin_command(self, msg, result, actualNickName=None):
-        fun_admin, text = result
+    def process_admin_command(self, msg, result, is_group=False):
+        command = result
         # 获取发起人的 UserName是否为管理
-        name=msg['ActualUserName']
+        name = msg.get('ActualUserName') or msg.get('FromUserName')
         if not self.get_friend_info(name):
             msg.user.send("权限不足")
             return None
-            
-        if fun_admin == Admin.admin.__name__:
-            msg.user.send(text)
-        elif fun_admin == Admin.admin_role.__name__ and text is not None:
-            # 设置角色
-            if actualNickName is None:
-                self.GroupGpt = self.set_role_model(
-                    text, self.config.model_name)
-            else:
-                self.GroupGpt = self.set_role_model(
-                    text, self.config.model_name)
-            msg.user.send("角色设置成功")
-                
-        elif fun_admin == Admin.admin_model.__name__ and text is not None:
-            if actualNickName is None:
-                self.FriendGpt = self.set_role_model(
-                    self.f_role, text)
-            else:
-                self.GroupGpt = self.set_role_model(
-                    self.g_role, text)
-            msg.user.send("模型更换成功")
-                
-        elif fun_admin in [
-            Admin.del_GroupChat.__name__,
-            Admin.del_FriendChat.__name__,
-            ]:
-            self.del_list(fun_admin, text)
-            msg.user.send(f"去除{text}成功")
-        elif fun_admin in [
-            Admin.add_FriendChat.__name__,
-            Admin.add_GroupChat.__name__,
-            ]:
-            self.add_list(fun_admin, text)
-            msg.user.send(f"添加{text}成功")
-        else:
-            msg.user.send("设置失败或指令错误")
-        
-            
-            
-    def del_list(self,type,item):
-        if type == Admin.del_FriendChat.__name__:
-            self.FriendGptList = [x for x in self.FriendGptList if x != item]
-            return self.FriendGptList
-        else:
-            self.GroupGptList = [x for x in self.GroupGptList if x != item]
-            return self.GroupGptList
-    
-    def add_list(self,type,item):
-        print(self.FriendGptList)
-        if type == Admin.add_FriendChat.__name__:
-            self.FriendGptList.append(item)
-        else:
-            self.GroupGptList.append(item)
+
+        msg.user.send(self.admin_service.handle(command, is_group=is_group))
 
     
 
-    def chat_with_gpt(self, user, message, actualNickName=None):
+    def chat_with_gpt(self, user, message, actualNickName=None, session_id=None, display_name=''):
         """
         使用 GPT 模型来回复消息。
 
@@ -210,16 +146,33 @@ class WxBot:
         message (str): 用户发送的消息文本。
         actualNickName (str, 可选): 发送消息的用户的昵称。
         """
-        key=next(self.key)
-        print(key)
-        os.environ["OPENAI_API_KEY"] = key#轮询
-        # 使用 GPT 进行聊天
+        is_group = actualNickName is not None
+        try:
+            res = self.chat_service.reply(message, session_id, display_name, is_group=is_group)
+        except Exception as exc:
+            logger.exception("GPT reply failed for %s: %s", display_name or session_id, exc)
+            res = f"回复失败：{exc}"
+
+        self.send_split_reply(user, res, actualNickName=actualNickName)
+
+    def send_split_reply(self, user, message, actualNickName=None):
+        parts = split_chat_reply(message, max_parts=5, max_chars=180)
+        if not parts:
+            return
+
         if actualNickName is not None:
-            res = self.GroupGpt.chat_ai_usage(message)
-            user.send(f'@{actualNickName}\u2005\n{res}')
+            user.send(f'@{actualNickName}\u2005\n{parts[0]}')
+            for part in parts[1:]:
+                sleep(REPLY_PART_DELAY_SECONDS)
+                user.send(part)
         else:
-            res = self.FriendGpt.chat_ai_usage(message)
-            user.send(res)
+            user.send(parts[0])
+            for part in parts[1:]:
+                sleep(REPLY_PART_DELAY_SECONDS)
+                user.send(part)
+
+    def build_group_session_id(self, group_id, member_id):
+        return f"group:{group_id}:member:{member_id}"
             
     def get_friend_info(self,username):
         '''
@@ -228,10 +181,9 @@ class WxBot:
         friend = itchat.search_friends(userName=username)
         if friend:
             name = friend["RemarkName"] or friend["NickName"]
-            if name in self.config.admin:
-                return True
-        else:
-            return False
+            return name in self.config.admin
+
+        return False
         
     def run(self):
         try:
@@ -258,7 +210,8 @@ class WxBot:
 def main():
     base = Util.get_config().openai_api_base
     if base is not None:
-        os.environ["OPENAI_API_BASE"] = base
+        import os
+        os.environ["OPENAI_API_BASE"] = normalize_openai_base_url(base)
     WxBot().run()
     
 if __name__ == '__main__':

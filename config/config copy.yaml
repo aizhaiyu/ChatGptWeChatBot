@@ -47,5 +47,15 @@ openai:
 #超时 秒
 timeout: 30
 
+#记忆设置
+memory:
+  #是否开启每个好友/群聊独立上下文记忆
+  enabled: true
+  #记忆保存目录，默认相对于项目根目录
+  dir: data/memory
+  #每个会话保留的最近消息数
+  recent_limit: 12
+  #消息数达到该值后自动压缩旧消息到摘要
+  compress_threshold: 16
 
 

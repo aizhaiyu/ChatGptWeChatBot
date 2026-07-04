@@ -1,79 +1,81 @@
+from dataclasses import dataclass
+from enum import Enum
+from textwrap import dedent
+
+
+class AdminAction(Enum):
+    HELP = "help"
+    SET_ROLE = "set_role"
+    SET_MODEL = "set_model"
+    ADD_GROUP_CHAT = "add_group_chat"
+    ADD_FRIEND_CHAT = "add_friend_chat"
+    DEL_GROUP_CHAT = "del_group_chat"
+    DEL_FRIEND_CHAT = "del_friend_chat"
+    INVALID = "invalid"
+
+
+@dataclass(frozen=True)
+class AdminCommand:
+    action: AdminAction
+    argument: str = ""
+    message: str = ""
+
+    @property
+    def is_valid(self):
+        return self.action != AdminAction.INVALID
+
 
 class Admin:
-    def __init__(self):
-        # 指令映射
-        self.instruct = {'$role': self.admin_role, '$addGroupChat':self.add_GroupChat, \
-                         '$addFriendChat':self.add_FriendChat, '$delGroupChat':self.del_GroupChat,\
-                         '$delFriendChat': self.del_FriendChat, '$model': self.admin_model}
+    HELP_TEXT = dedent(
+        """\
+        #admin 操作指令:使用管理指令
 
-    def use(self, text):
-        '''
-        获取提问，判断是否存在指令，不存在则返回描述语句
-        Args:
-            text(string):内容
-        Returns:
-            string
-        '''
-        # 判断是否包含指令，去掉前面的空格
-        result = text.lstrip()
-        for key in self.instruct.keys():
-            if result.find(key) != -1:
-                #存在
-                return self.instruct[key](result)
-        else:
-            #返回原本 判断是否存在空
-            return self.admin()
-        
-    def admin(self):
-        text= f'''#admin 操作指令:使用管理指令\n
         操作指令:
         $role 角色描述:角色扮演
         $addGroupChat 群聊名称:添加可用群聊
         $addFriendChat 好友名称:添加可私聊好友
-        $delGroupChat 排除群聊:从可用群聊中移除
-        $delFriendChat 排除好友:排除可私聊好友
+        $delGroupChat 群聊名称:从可用群聊中移除
+        $delFriendChat 好友名称:排除可私聊好友
         $model 聊天模型:更改聊天使用的模型
-        '''
-        # 去除每行开头的空格
-        formatted_text = '\n'.join(line.lstrip() for line in text.split('\n'))
-        return (self.admin.__name__, formatted_text)
+        """
+    )
 
-    def admin_role(self, text):
-        result = self.dateOp(text)
-        return self.admin_role.__name__, result
-    
-    def admin_model(self, text):
-        result = self.dateOp(text)
-        return self.admin_model.__name__, result
-    
-    def del_FriendChat(self, text):
-        result = self.dateOp(text)
-        return self.del_FriendChat.__name__, result
-    
-    def del_GroupChat(self, text):
-        result = self.dateOp(text)
-        return self.del_GroupChat.__name__, result
-    
-    def add_FriendChat(self, text):
-        result = self.dateOp(text)
-        return self.add_FriendChat.__name__, result
+    _COMMANDS = {
+        "$role": (AdminAction.SET_ROLE, "角色描述"),
+        "$model": (AdminAction.SET_MODEL, "聊天模型"),
+        "$addGroupChat": (AdminAction.ADD_GROUP_CHAT, "群聊名称"),
+        "$addFriendChat": (AdminAction.ADD_FRIEND_CHAT, "好友名称"),
+        "$delGroupChat": (AdminAction.DEL_GROUP_CHAT, "群聊名称"),
+        "$delFriendChat": (AdminAction.DEL_FRIEND_CHAT, "好友名称"),
+    }
 
-    def add_GroupChat(self, text):
-        result = self.dateOp(text)
-        return self.add_GroupChat.__name__, result
-        
-    
-    
-    def dateOp(self, text):
-        if not text or not isinstance(text, str):
+    def parse(self, text):
+        content = self._normalize_admin_text(text)
+        if not content:
+            return AdminCommand(AdminAction.HELP, message=self.HELP_TEXT)
+
+        command, _, argument = content.partition(" ")
+        if command not in self._COMMANDS:
+            return AdminCommand(
+                AdminAction.INVALID,
+                message=f"未知管理员指令：{command}\n\n{self.HELP_TEXT}",
+            )
+
+        action, argument_name = self._COMMANDS[command]
+        argument = argument.strip()
+        if not argument:
+            return AdminCommand(
+                AdminAction.INVALID,
+                message=f"{command} 缺少{argument_name}\n\n{self.HELP_TEXT}",
+            )
+
+        return AdminCommand(action, argument=argument)
+
+    def _normalize_admin_text(self, text):
+        if not isinstance(text, str):
             return ""
 
-        space_index = text.find(' ')
-        if space_index != -1:
-            return text[space_index + 1:].lstrip()
-        else:
-            return text
-
-
-
-
+        content = text.strip()
+        if content.startswith("#admin"):
+            content = content[len("#admin"):]
+        return content.strip()

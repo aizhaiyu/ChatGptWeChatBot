@@ -42,7 +42,7 @@ class Instruct:
         return self.url.__name__,"待开发"
         
     def admin(self,msg):
-        result = Admin().use(msg.replace("#admin", ''))
+        result = Admin().parse(msg)
         return self.admin.__name__, result
     
     def isHelp(self, command):
